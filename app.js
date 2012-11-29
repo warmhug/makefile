@@ -12,7 +12,10 @@ var makefile = {
     },
     content: function (name) {
 
-        if (!name) return 'please input filename';
+        if (!name) {
+            console.log('please input filename');
+            return;
+        }
 
         var temp = '',
             lastIndex = name.lastIndexOf('.'),
