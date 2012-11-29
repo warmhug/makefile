@@ -58,4 +58,4 @@ var makefile = {
     }
 }
 
-exports.file = makefile;
+exports.makefile = makefile;
