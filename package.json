@@ -1,0 +1,23 @@
+{
+  "name": "makefile",
+  "version": "0.0.1",
+  "description": "create template file,support html/js/css...",
+  "main": "makefile.js",
+  "bin": {
+    "makefile": "bin/makefile.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/warmhug/makefile.git"
+  },
+  "keywords": [
+    "create",
+    "template",
+    "file"
+  ],
+  "author": "hualei",
+  "license": "BSD"
+}
