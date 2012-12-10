@@ -3,4 +3,5 @@
 var makefile = require('../app.js').makefile,
     arg = process.argv[2];
 //console.log(makefile);
-makefile.content(arg);
+
+makefile.init(arg);
