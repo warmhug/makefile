@@ -1,7 +1,7 @@
 {
   "name": "makefile",
-  "version": "0.0.1",
-  "description": "create template file,support html/js/css...",
+  "version": "0.0.2",
+  "description": "template file/dirs generation tool",
   "main": "makefile.js",
   "bin": {
     "makefile": "bin/makefile.js"
@@ -14,9 +14,9 @@
     "url": "git://github.com/warmhug/makefile.git"
   },
   "keywords": [
-    "create",
-    "template",
-    "file"
+    "file/dirs",
+    "custom template",
+    "tool"
   ],
   "author": "hualei",
   "license": "BSD"
