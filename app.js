@@ -163,11 +163,11 @@ var makefile = {
 
         }
         modifySync({
-            'ori_dir': path.normalize(__dirname + '/seajs_template'),
+            'ori_dir': path.normalize(__dirname + '/template'),
             'tar_dir': './' + this.dir_name,
             'flag': 'copy'
         });
-        console.log('seajs_template create success!');
+        console.log('template create success!');
 
     }
 }
