@@ -1,6 +1,8 @@
 
 var fs = require('fs'),
-    os = require('os');
+    os = require('os'),
+    util = require('util'),
+    path = require('path');
 
 var makefile = {
     init: function (arg) {
@@ -30,7 +32,8 @@ var makefile = {
 
         var temp = '',
             fname = this.fname,
-            ext = this.ext;
+            ext = this.ext,
+            fullname = fname + ext;
         switch (ext) {
             case '.html':
             case '.htm':
@@ -57,13 +60,13 @@ var makefile = {
                 temp = '/****************************************************\n' +
                         '* author：  ' + this.info.user + '\n' +
                         '* time：    ' + this.info.time + '\n' +
-                        '* fileName：' + fname + '.' + ext + '\n' +
+                        '* fileName：' + fullname + '\n' +
                         '*****************************************************/\n';
                 break;
         }
 
         // 生成文件
-        fs.writeFile('./' + name, temp, function (err) {
+        fs.writeFile('./' + fullname, temp, function (err) {
             if (err) throw err;
             console.log('makefile success');
         });
@@ -84,16 +87,16 @@ var makefile = {
                 try {
                     var files = fs.readdirSync(dir);
                     files.forEach(function (file, index) {
-                        var path = dir + '/' + file;
-                        var stats = fs.statSync(path);
+                        var dpath = path.normalize(dir + '/' + file);
+                        var stats = fs.statSync(dpath);
                         if (stats.isDirectory()) {
-                            search(path);
+                            search(dpath);
                         }
-                        dirArr.push(path);
+                        dirArr.push(dpath);
                     });
                 } catch (err) {
                     if (err && err.code === 'ENOENT') {
-                        console.log('the dir is not exist..');
+                        //console.log('the dir is not exist..');
                     }
                 }
             }
@@ -129,24 +132,30 @@ var makefile = {
                     deleteSync(tar_dirArr);
                     break;
                 case 'copy':
-                    var ori_name = ori_dir.split('/').length > 1 && ori_dir.split('/')[1],
-                    tar_name = tar_dir.split('/').length > 1 && tar_dir.split('/')[1];
+                    var slash = path.normalize('/');
+                    var ori = ori_dir.split(slash),
+                        ori_name = ori[ori.length - 1];
+                    //console.log(ori);
+                    var tar_name = tar_dir.split('/').length > 1 && tar_dir.split('/')[1];
                     if (!deleteSync(tar_dirArr)) { // 如果不存在 目标目录
-                        fs.mkdirSync(tar_name);
+                        fs.mkdirSync(tar_dir);
                     }
                     for (var i = ori_dirArr.length - 1; i >= 0; i--) {
                         var curr = ori_dirArr[i];
                         stats = fs.statSync(curr);
-                        var fileName = curr.substring(curr.lastIndexOf('/') + 1, curr.lastIndexOf('.'));
-                        var path = curr.replace('/' + ori_name + '/', '/' + tar_name + '/');
-                        console.log(path);
+                        //var fileName = curr.substring(curr.lastIndexOf('/') + 1, curr.lastIndexOf('.'));
+                        var tpath = curr.replace(new RegExp(".*?" + slash + slash + ori_name), path.normalize('./') + tar_name);
+                        //console.log(tpath);
 
                         if (stats.isFile()) {
                             var data = fs.readFileSync(curr);
-                            var npath = path.replace('/' + fileName + '.', '/' + tar_name + '.');
+                            var extname = path.extname(tpath),
+                                prename = path.basename(tpath, extname);
+                            var npath = tpath.replace(new RegExp(prename), tar_name);
+                            //console.log(npath);
                             fs.writeFileSync(npath, data);
                         } else if (stats.isDirectory()) {
-                            fs.mkdirSync(path);
+                            fs.mkdirSync(tpath);
                         }
                     }
                     break;
@@ -154,10 +163,12 @@ var makefile = {
 
         }
         modifySync({
-            'ori_dir': './seajs_template',
+            'ori_dir': path.normalize(__dirname + '/seajs_template'),
             'tar_dir': './' + this.dir_name,
             'flag': 'copy'
         });
+        console.log('seajs_template create success!');
+
     }
 }
 
