@@ -24,7 +24,8 @@ var makefile = {
         var dt = date.getFullYear() + '/' + (parseInt(date.getMonth()) + 1) + '/' + date.getDate() + ' ' + hhh + ':' + mmm + ':' + date.getSeconds();
         return {
             time: dt,
-            user: os.hostname()
+            //user: os.hostname()
+            user: process.env.USERNAME || 'user'
         };
     })(),
     // 生成单个文件
